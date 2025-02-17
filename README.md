@@ -2,8 +2,6 @@
 
 *A powerful, web-based drawing tool built with Fabric.js, inspired by Excalidraw.*
 
-[![License](https://img.shields.io/github/license/vaishvan/drawrrr)](LICENSE)
-
 ## 🚀 Overview
 Drawrrr is a lightweight, open-source **whiteboard and diagramming tool** built using **Fabric.js**. It aims to provide an intuitive and smooth drawing experience, similar to **Excalidraw**, while leveraging the powerful vector capabilities of Fabric.js.
 
