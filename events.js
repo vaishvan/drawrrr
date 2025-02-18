@@ -1,4 +1,3 @@
-// Mouse event handlers
 canvas.on('mouse:down', (options) => {
     if (currentMode === 'select' || isPanning || spacePressed) return;
     
@@ -64,11 +63,9 @@ canvas.on('mouse:move', (options) => {
             if (obj.tempShape) canvas.remove(obj);
         });
 
-        // Calculate angle for arrow head
         const angle = Math.atan2(pointer.y - startPoint.y, pointer.x - startPoint.x);
         const headLength = 20;
 
-        // Create arrow body
         const line = new fabric.Line([
             startPoint.x,
             startPoint.y,
@@ -80,7 +77,6 @@ canvas.on('mouse:move', (options) => {
             tempShape: true
         });
 
-        // Create arrow head
         const head1 = new fabric.Line([
             pointer.x,
             pointer.y,
@@ -103,7 +99,6 @@ canvas.on('mouse:move', (options) => {
             tempShape: true
         });
 
-        // Add all parts to canvas
         canvas.add(line, head1, head2);
     }
 
@@ -119,7 +114,6 @@ canvas.on('mouse:up', (options) => {
         const lastObj = objects.find(obj => obj.tempShape === true);
         
         if (lastObj) {
-            // Convert the temporary shape to a permanent object
             const rect = new fabric.Rect({
                 left: lastObj.left,
                 top: lastObj.top,
@@ -141,7 +135,6 @@ canvas.on('mouse:up', (options) => {
         const lastObj = objects.find(obj => obj.tempShape === true);
         
         if (lastObj) {
-            // Convert the temporary shape to a permanent object
             const circle = new fabric.Circle({
                 left: lastObj.left,
                 top: lastObj.top,
@@ -158,13 +151,11 @@ canvas.on('mouse:up', (options) => {
             canvas.setActiveObject(circle);
         }
     } else if (currentMode === 'arrow') {
-        // Get all temporary objects
         const tempObjects = canvas.getObjects().filter(obj => obj.tempShape === true);
         
         if (tempObjects.length === 3) {
             const [line, head1, head2] = tempObjects;
             
-            // Get the positions of arrow parts
             const arrowPoints = {
                 startX: line.x1,
                 startY: line.y1,
@@ -172,10 +163,8 @@ canvas.on('mouse:up', (options) => {
                 endY: line.y2
             };
             
-            // Remove temporary objects
             tempObjects.forEach(obj => canvas.remove(obj));
             
-            // Create permanent arrow as a path (better for manipulation)
             const arrowPath = createArrowPath(
                 arrowPoints.startX, 
                 arrowPoints.startY, 
@@ -188,7 +177,6 @@ canvas.on('mouse:up', (options) => {
         }
     }
     
-    // Automatically switch to select mode after drawing
     if (currentMode !== 'select' && currentMode !== 'draw') {
         setMode('select');
         canvas.isDrawingMode = false;
@@ -197,19 +185,14 @@ canvas.on('mouse:up', (options) => {
     canvas.renderAll();
 });
 
-// Create an arrow path (as single object) for better manipulation
 function createArrowPath(fromX, fromY, toX, toY) {
-    // Calculate angle and head dimensions
     const angle = Math.atan2(toY - fromY, toX - fromX);
     const headLength = 20;
-    
-    // Calculate head coordinates
     const head1X = toX - headLength * Math.cos(angle - Math.PI/6);
     const head1Y = toY - headLength * Math.sin(angle - Math.PI/6);
     const head2X = toX - headLength * Math.cos(angle + Math.PI/6);
     const head2Y = toY - headLength * Math.sin(angle + Math.PI/6);
     
-    // Create arrow as a path
     const pathData = [
         'M', fromX, fromY,
         'L', toX, toY,
@@ -219,7 +202,6 @@ function createArrowPath(fromX, fromY, toX, toY) {
         'L', head2X, head2Y
     ];
     
-    // Create the path object with proper selection handles
     return new fabric.Path(pathData.join(' '), {
         stroke: strokeColor,
         strokeWidth: 2,
@@ -231,11 +213,10 @@ function createArrowPath(fromX, fromY, toX, toY) {
         hasBorders: true,
         cornerSize: 8,
         transparentCorners: false,
-        objectType: 'arrow'  // Custom property to identify arrows
+        objectType: 'arrow'  
     });
 }
 
-// Enable moving and editing objects
 canvas.on('object:moving', (options) => {
     canvas.renderAll();
 });
@@ -248,7 +229,6 @@ canvas.on('object:rotating', (options) => {
     canvas.renderAll();
 });
 
-// Make sure objects are selectable when in select mode
 canvas.on('selection:created', (options) => {
     if (currentMode === 'select') {
         options.target.set({
