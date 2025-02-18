@@ -1,4 +1,3 @@
-// Color picker functionality
 document.getElementById('stroke-color').addEventListener('input', (e) => {
     strokeColor = e.target.value;
     canvas.freeDrawingBrush.color = strokeColor;
@@ -16,9 +15,7 @@ document.getElementById('fill-color').addEventListener('input', (e) => {
     }
 });
 
-// Export functionality
 document.getElementById('export').addEventListener('click', () => {
-    // Convert canvas to PNG and trigger download
     const dataURL = canvas.toDataURL({
         format: 'png',
         quality: 1
@@ -31,7 +28,6 @@ document.getElementById('export').addEventListener('click', () => {
     document.body.removeChild(a);
 });
 
-// Import functionality
 document.getElementById('import').addEventListener('click', () => {
     document.getElementById('file-input').click();
 });
@@ -43,13 +39,10 @@ document.getElementById('file-input').addEventListener('change', (e) => {
         reader.onload = (event) => {
             const img = new Image();
             img.onload = () => {
-                // Create a new fabric.Image instance
                 const fabricImage = new fabric.Image(img);
                 
-                // Clear the canvas
                 canvas.clear();
                 
-                // Scale the image to fit the canvas while maintaining aspect ratio
                 const scale = Math.min(
                     canvas.width / img.width,
                     canvas.height / img.height
@@ -57,13 +50,11 @@ document.getElementById('file-input').addEventListener('change', (e) => {
                 
                 fabricImage.scale(scale);
                 
-                // Center the image
                 fabricImage.set({
                     left: (canvas.width - img.width * scale) / 2,
                     top: (canvas.height - img.height * scale) / 2
                 });
                 
-                // Add the image to the canvas
                 canvas.add(fabricImage);
                 canvas.renderAll();
             };
@@ -73,7 +64,6 @@ document.getElementById('file-input').addEventListener('change', (e) => {
     }
 });
 
-// Toolbar functionality
 document.getElementById('select').addEventListener('click', () => {
     setMode('select');
     canvas.isDrawingMode = false;
@@ -118,7 +108,6 @@ document.getElementById('clear').addEventListener('click', () => {
     }
 });
 
-// Set active tool
 function setMode(mode) {
     currentMode = mode;
     document.querySelectorAll('.toolbar button').forEach(btn => {
@@ -127,7 +116,6 @@ function setMode(mode) {
     document.getElementById(mode).classList.add('active');
 }
 
-// Add text
 function addText() {
     const text = new fabric.IText('Type here', {
         left: 100,
@@ -141,6 +129,5 @@ function addText() {
     });
     canvas.add(text);
     canvas.setActiveObject(text);
-    // Automatically switch to select mode after adding text
     setMode('select');
 }
