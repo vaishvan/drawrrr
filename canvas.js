@@ -1,13 +1,11 @@
-// Initialize canvas with panning capability
 const canvas = new fabric.Canvas('canvas', {
-    width: window.innerWidth - 40, // Adjust for padding
-    height: window.innerHeight - 100, // Adjust for toolbar and padding
+    width: window.innerWidth - 40, 
+    height: window.innerHeight - 100, 
     backgroundColor: 'white',
     isDrawingMode: false,
     selection: true
 });
 
-// Tool state
 let currentMode = 'select';
 let isDrawing = false;
 let startPoint = null;
@@ -17,14 +15,11 @@ let isPanning = false;
 let lastPosX;
 let lastPosY;
 
-// Configure drawing brush
 canvas.freeDrawingBrush.width = 2;
 canvas.freeDrawingBrush.color = strokeColor;
 
-// Infinite canvas functionality
 canvas.on('mouse:wheel', function(opt) {
     if (!opt.e.ctrlKey) {
-        // Pan when not holding ctrl
         const delta = opt.e.deltaY;
         const zoom = canvas.getZoom();
         let newZoom = zoom;
@@ -40,7 +35,6 @@ canvas.on('mouse:wheel', function(opt) {
         opt.e.preventDefault();
         opt.e.stopPropagation();
     } else {
-        // Zoom when holding ctrl
         const delta = opt.e.deltaY;
         const zoom = canvas.getZoom();
         let newZoom = zoom;
@@ -58,7 +52,6 @@ canvas.on('mouse:wheel', function(opt) {
     }
 });
 
-// Enable panning when space is held or middle mouse button is pressed
 let spacePressed = false;
 document.addEventListener('keydown', function(e) {
     if (e.code === 'Space') {
@@ -75,7 +68,7 @@ document.addEventListener('keyup', function(e) {
 });
 
 canvas.on('mouse:down', function(opt) {
-    if (spacePressed || opt.e.button === 1) { // middle mouse button
+    if (spacePressed || opt.e.button === 1) { 
         isPanning = true;
         lastPosX = opt.e.clientX;
         lastPosY = opt.e.clientY;
@@ -100,7 +93,6 @@ canvas.on('mouse:up', function() {
     canvas.defaultCursor = spacePressed ? 'grab' : 'default';
 });
 
-// Make canvas responsive
 window.addEventListener('resize', () => {
     canvas.setDimensions({
         width: window.innerWidth - 40,
@@ -108,5 +100,4 @@ window.addEventListener('resize', () => {
     });
 });
 
-// Set initial mode
 setMode('select');
